@@ -1,7 +1,8 @@
 // Uncomment this block to pass the first stage
 use std::{
     io::{Read, Write},
-    net::TcpListener,
+    net::TcpListener, 
+    thread,
 };
 
 fn main() {
@@ -15,7 +16,11 @@ fn main() {
         match stream {
             Ok( stream) => {
                 eprintln!("Connection from: {}", stream.peer_addr().unwrap());
-                handle_connection( stream);
+
+                thread::spawn(|| {
+                    handle_connection( stream);
+                });
+     
             }
             Err(e) => {
                 println!("error: {}", e);
